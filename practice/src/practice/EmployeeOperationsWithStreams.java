@@ -5,6 +5,7 @@ import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -116,6 +117,9 @@ class Employee{
 	   Map<String,Double> map2 =empList.stream().collect(Collectors.groupingBy(Employee::getDepartment, Collectors.averagingDouble(Employee::getSalary)));
 	   return map2;
    }
+   
+  
+   
     
 }
 
@@ -174,8 +178,11 @@ Employee emp = new Employee();
 				System.out.println(".....................................");
 				for(Entry<String, Double> entry :map2.entrySet()) {
 					System.out.println(entry.getKey()+" : "+entry.getValue());	
+					
+					
 				}
-				
+			Optional<Employee>e =	employeeList.stream().filter(employee -> employee.getAge() <30).findFirst();
+			System.out.println(e.get());
 	}
 
 }
