@@ -117,7 +117,29 @@ class Employee{
 	   Map<String,Double> map2 =empList.stream().collect(Collectors.groupingBy(Employee::getDepartment, Collectors.averagingDouble(Employee::getSalary)));
 	   return map2;
    }
+   //List down the names of all employees in each department?
    
+   public void getAllNamesDeptWise(List<Employee>empList){
+	   
+	   Map<String, List<Employee>> deptWiseNames=empList.stream().collect(Collectors.groupingBy(Employee::getDepartment));
+	   Set<Entry<String, List<Employee>>> entrySet=deptWiseNames.entrySet();
+	   for (Entry<String, List<Employee>> entry : entrySet) 
+	   {
+	       System.out.println("--------------------------------------");
+	                
+	       System.out.println("Employees In "+entry.getKey() + " : ");
+	                
+	       System.out.println("--------------------------------------");
+	                
+	       List<Employee> list = entry.getValue();
+	                
+	       for (Employee e : list) 
+	       {
+	           System.out.println(e.getName());
+	       }
+	   }
+	   
+   }
   
    
     
@@ -183,6 +205,9 @@ Employee emp = new Employee();
 				}
 			Optional<Employee>e =	employeeList.stream().filter(employee -> employee.getAge() <30).findFirst();
 			System.out.println(e.get());
+			
+			emp.getAllNamesDeptWise(employeeList);
+			//System.out.println(m);
 	}
 
 }

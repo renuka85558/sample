@@ -107,8 +107,10 @@ class Emp {
 
 		for (Employee e : empList) {
 			if (map.containsKey(e.getDepartment())) {
+				int count = map.get(e.getDepartment());
+				count = count + 1;
 
-				map.put(e.getDepartment(), map.get(e.getDepartment()) + 1);
+				map.put(e.getDepartment(), count);
 
 			} else {
 				map.put(e.getDepartment(), 1);
@@ -120,92 +122,175 @@ class Emp {
 
 	// get employees by department wise
 	public static Map<String, List<Employee>> getEmployeesByDept(List<Employee> empList) {
-		Map<String, List<Employee>> map2 = new HashMap<String, List<Employee>>();
+		Map<String, List<Employee>> deptWiseEmps = new HashMap<String, List<Employee>>();
 		List<Employee> list = new ArrayList<Employee>();
 		for (Employee e : empList) {
-			if (map2.containsKey(e.getDepartment())) {
-				
-				
-				map2.put(e.getDepartment(), list);
+			if (deptWiseEmps.containsKey(e.getDepartment())) {
+				List<Employee> deptwiseEmplist = deptWiseEmps.get(e.getDepartment());
+
+				deptwiseEmplist.add(e);
+
+				deptWiseEmps.put(e.getDepartment(), deptwiseEmplist);
 
 			} else {
+
 				list.add(e);
-				map2.put(e.getDepartment(), list);
+				deptWiseEmps.put(e.getDepartment(), list);
 			}
 		}
 
-		return map2;
+		return deptWiseEmps;
 	}
 
+	/*
+	 * public Map<String, Double> avgSalByDept(List<Employee> empList) {
+	 * 
+	 * Map<String, Double> deptWiseAvgSal = new HashMap<String, Double>();
+	 * 
+	 * for (Employee e : empList) { double total = e.getSalary(); // int count =0;
+	 * if (deptWiseAvgSal.containsKey(e.getDepartment())) {
+	 * 
+	 * 
+	 * 
+	 * double sal = deptWiseAvgSal.get(e.getDepartment()); total = total + sal;
+	 * 
+	 * double avgSal =total/count;
+	 * 
+	 * 
+	 * 
+	 * deptWiseAvgSal.put(e.getDepartment(), avgSal); } else {
+	 * deptWiseAvgSal.put(e.getDepartment(), e.getSalary()); } } return
+	 * deptWiseAvgSal;
+	 * 
+	 * }
+	 */
+
+	public Map<String,Double> deptWiseAvgSal(List<Employee>list){
+		Map<String, Double> deptWiseAvgSal = new HashMap<String, Double>();
+		for(Employee e:list) {
+			if(deptWiseAvgSal.containsKey(e.getDepartment())) {
+				
+			}
+		}
+		return deptWiseAvgSal;
+	}
 	// max salary of employee
 	public double getMaxSal(List<Employee> empList) {
 
-		Iterator<Employee> i = empList.iterator();
 		double maxsalary = 0;
 		double sal = 0;
-		while (i.hasNext()) {
-			Employee e = i.next();
+		for (Employee e : empList) {
 			sal = e.getSalary();
 			if (sal > maxsalary) {
 				maxsalary = sal;
 			}
 		}
-		
+
 		System.out.println("maximum salary..." + maxsalary);
 		return maxsalary;
 	}
 
-	// min salary of employee
-		public double getMinSal(List<Employee> empList) {
+//sal ,maxsal
+//25,0
+//190,250
+//190,250
+//180,250
+//325,250
+//225,325
+//100,325
+//270,325
+//325,345
+//115,345
+//110,345
+//157,345
+//282,345
+//22,345
+//100,345
+//150,345
+//200,345
+//500,345
+//345,500
+// min salary of employee
+	public double getMinSal(List<Employee> empList) {
+		double minimumSal = empList.get(0).getSalary();
 
-			Iterator<Employee> i = empList.iterator();
-			double minsalary = 0;
-			double sal = 0;
-			while (i.hasNext()) {
-				Employee e = i.next();
-				sal = e.getSalary();
-				if (sal < minsalary) {
-					minsalary = sal;
-				}
+		for (Employee e : empList) {
+			double salary = e.getSalary();
+			if (minimumSal > salary) {
+				minimumSal = salary;
+
 			}
-			
-			System.out.println("minimum salary..." + minsalary);
-			return minsalary;
+
 		}
-		public double getTotalSal(List<Employee> empList) {
-			double total=0;
-			double sal;
-			for(Employee e:empList) {
-				sal=e.getSalary();
-				total=total+sal;
-				
-			}
-			return total;
-			
+
+		System.out.println("minimum salary..." + minimumSal);
+		return minimumSal;
+	}
+//minsal,sal 
+//	25000,25000
+//25,19
+//19,18 
+//18, 32
+//18,22	
+//18,105
+//105,27
+//105,345
+//105,115
+//105,11
+//105,157
+//105,28
+//105,22
+//105,100
+//100,150
+//100,200
+//100,500
+//	
+
+	public double getTotalSal(List<Employee> empList) {
+		double total = 0;
+		double sal;
+		for (Employee e : empList) {
+			sal = e.getSalary();
+			total = total + sal;
+
 		}
-		
-		public int employeeCount(List<Employee> empList) {
-			int count =0;
-			for(Employee e1 :empList) {
-				count++;
-			}
-			return count;
-			
+		return total;
+
+	}
+//total ,sal
+//0,250
+//250,190
+//440,180
+//620,325
+//945,227
+//1172,105
+//1277,270
+//1447,345
+//1792,115
+//1907,110
+
+	public int employeeCount(List<Employee> empList) {
+		int count = 0;
+		for (Employee e1 : empList) {
+			count++;
 		}
-		
-		public double avgSalaryOfEmployees(List<Employee> empList) {
-			double avgSal=0;
-			double total=0;
-			double sal;
-			int count =0;
-			for(Employee e:empList) {
-				count++;
-				sal=e.getSalary();
-				total=total+sal;
-				 avgSal =total/count;
-			}
-			return avgSal;
+		return count;
+
+	}
+
+	public double avgSalaryOfEmployees(List<Employee> empList) {
+		double avgSal = 0;
+		double total = 0;
+		double sal;
+		// int count = empList.size();
+		for (Employee e : empList) {
+
+			sal = e.getSalary();
+			total = total + sal;
+			avgSal = total / empList.size();
 		}
+		return avgSal;
+	}
 
 }
 
@@ -232,14 +317,14 @@ public class EmployeeOperationsWithoutStreams {
 		employeeList.add(new Employee(16, "mokshi", 26, "Female", "prod", 2015, 20000.0));
 		employeeList.add(new Employee(17, "nav", 31, "Male", "prod", 2019, 50000.0));
 		Emp emp = new Emp();
-		Map<String, Integer> map = emp.employeeCountByDepartment(employeeList);
-		System.out.println("Count the number of employees in each department");
-		System.out.println("................................................");
-		for (Entry<String, Integer> entry : map.entrySet()) {
-			System.out.println(entry.getKey() + " : " + entry.getValue());
-		}
-		System.out.println(map);
-
+		/*
+		 * Map<String, Integer> map = emp.employeeCountByDepartment(employeeList);
+		 * System.out.println("Count the number of employees in each department");
+		 * System.out.println("................................................"); for
+		 * (Entry<String, Integer> entry : map.entrySet()) {
+		 * System.out.println(entry.getKey() + " : " + entry.getValue()); }
+		 * System.out.println(map);
+		 */
 		Map<String, List<Employee>> map2 = emp.getEmployeesByDept(employeeList);
 
 		System.out.println("department wise employees");
@@ -251,18 +336,27 @@ public class EmployeeOperationsWithoutStreams {
 //System.out.println(map2);
 
 //map2.forEach((k,v) -> System.out.println(k+ ";"+v));
-		double sal=emp.getMaxSal(employeeList);
-		System.out.println("max sal :"+sal);
-		
-		double minSal=emp.getMaxSal(employeeList);
-		System.out.println("min sal :"+minSal);
-		double totalSal =emp.getTotalSal(employeeList);
-		System.out.println("total salary :"+totalSal);
-		int count =emp.employeeCount(employeeList);
-		System.out.println("Employee count : "+count);
-		
-		double avgSalary =emp.avgSalaryOfEmployees(employeeList);
-		System.out.println("average salary of employees   :: "+avgSalary);
+		double sal = emp.getMaxSal(employeeList);
+		System.out.println("max sal :" + sal);
+
+		double minSal = emp.getMinSal(employeeList);
+		System.out.println("min sal :" + minSal);
+		/*
+		 * double totalSal =emp.getTotalSal(employeeList);
+		 * System.out.println("total salary :"+totalSal); int count
+		 * =emp.employeeCount(employeeList);
+		 * System.out.println("Employee count : "+count);
+		 * 
+		 * double avgSalary =emp.avgSalaryOfEmployees(employeeList);
+		 * System.out.println("average salary of employees   :: "+avgSalary);
+		 */
+		Map<String, Double> avgSalDepwise = emp.avgSalByDept(employeeList);
+		for (Entry<String, Double> entry : avgSalDepwise.entrySet()) {
+			System.out.println(entry.getKey() + " :" + entry.getValue());
+			
+			
+		}
+		Map<String, Double> avgSalbyDept
 	}
 
 }
