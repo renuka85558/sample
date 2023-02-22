@@ -123,7 +123,7 @@ class Emp {
 	// get employees by department wise
 	public static Map<String, List<Employee>> getEmployeesByDept(List<Employee> empList) {
 		Map<String, List<Employee>> deptWiseEmps = new HashMap<String, List<Employee>>();
-		List<Employee> list = new ArrayList<Employee>();
+
 		for (Employee e : empList) {
 			if (deptWiseEmps.containsKey(e.getDepartment())) {
 				List<Employee> deptwiseEmplist = deptWiseEmps.get(e.getDepartment());
@@ -133,7 +133,7 @@ class Emp {
 				deptWiseEmps.put(e.getDepartment(), deptwiseEmplist);
 
 			} else {
-
+				List<Employee> list = new ArrayList<Employee>();
 				list.add(e);
 				deptWiseEmps.put(e.getDepartment(), list);
 			}
@@ -142,38 +142,101 @@ class Emp {
 		return deptWiseEmps;
 	}
 
-	/*
-	 * public Map<String, Double> avgSalByDept(List<Employee> empList) {
-	 * 
-	 * Map<String, Double> deptWiseAvgSal = new HashMap<String, Double>();
-	 * 
-	 * for (Employee e : empList) { double total = e.getSalary(); // int count =0;
-	 * if (deptWiseAvgSal.containsKey(e.getDepartment())) {
-	 * 
-	 * 
-	 * 
-	 * double sal = deptWiseAvgSal.get(e.getDepartment()); total = total + sal;
-	 * 
-	 * double avgSal =total/count;
-	 * 
-	 * 
-	 * 
-	 * deptWiseAvgSal.put(e.getDepartment(), avgSal); } else {
-	 * deptWiseAvgSal.put(e.getDepartment(), e.getSalary()); } } return
-	 * deptWiseAvgSal;
-	 * 
-	 * }
-	 */
+	public Map<String, Double> avgSalByDept(List<Employee> empList) {
 
-	public Map<String,Double> deptWiseAvgSal(List<Employee>list){
 		Map<String, Double> deptWiseAvgSal = new HashMap<String, Double>();
-		for(Employee e:list) {
-			if(deptWiseAvgSal.containsKey(e.getDepartment())) {
-				
+
+		for (Employee e : empList) {
+			double total = e.getSalary();
+			if (deptWiseAvgSal.containsKey(e.getDepartment())) {
+
+				double sal = deptWiseAvgSal.get(e.getDepartment());
+				total = total + sal;
+
+				deptWiseAvgSal.put(e.getDepartment(), total);
+			} else {
+				deptWiseAvgSal.put(e.getDepartment(), e.getSalary());
 			}
 		}
 		return deptWiseAvgSal;
+
 	}
+
+	public Map<String, Double> deptWiseAvgSal(List<Employee> list) {
+		Map<String, Double> deptWiseAvgSalmap = new HashMap<String, Double>();
+
+		for (Employee e : list) {
+
+			Map<String, List<Employee>> newmap = e.getEmployeesByDept(list);
+
+			for (Entry<String, List<Employee>> entry : newmap.entrySet()) {
+				// System.out.println(entry.getKey()+":"+entry.getValue());
+				String dept = entry.getKey();
+				List<Employee> deptwiseEmpList = entry.getValue();
+				double deptwiseAvgSal = avgSalaryOfEmployees(deptwiseEmpList);
+
+				deptWiseAvgSalmap.put(dept, deptwiseAvgSal);
+
+			}
+
+		}
+
+		return deptWiseAvgSalmap;
+
+	}
+
+	// group by department wise
+	// test:[]
+	// hr=
+	// get salary from list
+	// total
+	// sal =e.sal
+
+	public List<String> getMatchedNames(List<Employee> empList) {
+		List<String> getMatchedEmpNames = new ArrayList<String>();
+
+		for (Employee e : empList) {
+
+			String str = e.getName();
+			if (str.matches("(.*)na(.*)")) {
+				getMatchedEmpNames.add(e.getName());
+			}
+
+		}
+
+		return getMatchedEmpNames;
+	}
+
+	public List<String> getExactMatchedNames(List<Employee> empList) {
+		List<String> getExactMatchedEmpNames = new ArrayList<String>();
+
+		for (Employee e : empList) {
+
+			String str = e.getName();
+			if (str.equals("nav")) {
+				getExactMatchedEmpNames.add(e.getName());
+			}
+
+		}
+
+		return getExactMatchedEmpNames;
+	}
+
+	public List<String> getconMatchedNames(List<Employee> empList) {
+		List<String> getCMatchedEmpNames = new ArrayList<String>();
+
+		for (Employee e : empList) {
+
+			String str = e.getName();
+			if (str.contains("renu")) {
+				getCMatchedEmpNames.add(e.getName());
+			}
+
+		}
+
+		return getCMatchedEmpNames;
+	}
+
 	// max salary of employee
 	public double getMaxSal(List<Employee> empList) {
 
@@ -317,14 +380,15 @@ public class EmployeeOperationsWithoutStreams {
 		employeeList.add(new Employee(16, "mokshi", 26, "Female", "prod", 2015, 20000.0));
 		employeeList.add(new Employee(17, "nav", 31, "Male", "prod", 2019, 50000.0));
 		Emp emp = new Emp();
-		/*
-		 * Map<String, Integer> map = emp.employeeCountByDepartment(employeeList);
-		 * System.out.println("Count the number of employees in each department");
-		 * System.out.println("................................................"); for
-		 * (Entry<String, Integer> entry : map.entrySet()) {
-		 * System.out.println(entry.getKey() + " : " + entry.getValue()); }
-		 * System.out.println(map);
-		 */
+
+		Map<String, Integer> map = emp.employeeCountByDepartment(employeeList);
+		System.out.println("Count the number of employees in each department");
+		System.out.println("................................................");
+		for (Entry<String, Integer> entry : map.entrySet()) {
+			System.out.println(entry.getKey() + " : " + entry.getValue());
+		}
+		System.out.println(map);
+
 		Map<String, List<Employee>> map2 = emp.getEmployeesByDept(employeeList);
 
 		System.out.println("department wise employees");
@@ -338,25 +402,49 @@ public class EmployeeOperationsWithoutStreams {
 //map2.forEach((k,v) -> System.out.println(k+ ";"+v));
 		double sal = emp.getMaxSal(employeeList);
 		System.out.println("max sal :" + sal);
-
+		System.out.println("...........");
 		double minSal = emp.getMinSal(employeeList);
 		System.out.println("min sal :" + minSal);
-		/*
-		 * double totalSal =emp.getTotalSal(employeeList);
-		 * System.out.println("total salary :"+totalSal); int count
-		 * =emp.employeeCount(employeeList);
-		 * System.out.println("Employee count : "+count);
-		 * 
-		 * double avgSalary =emp.avgSalaryOfEmployees(employeeList);
-		 * System.out.println("average salary of employees   :: "+avgSalary);
-		 */
-		Map<String, Double> avgSalDepwise = emp.avgSalByDept(employeeList);
-		for (Entry<String, Double> entry : avgSalDepwise.entrySet()) {
+		System.out.println(".........");
+		double totalSal = emp.getTotalSal(employeeList);
+		System.out.println("total salary :" + totalSal);
+		System.out.println("............");
+		int count = emp.employeeCount(employeeList);
+		System.out.println("Employee count : " + count);
+		System.out.println(".............");
+		System.out.println();
+		double avgSalary = emp.avgSalaryOfEmployees(employeeList);
+		System.out.println("average salary of employees   :: " + avgSalary);
+		System.out.println("...........................");
+
+		Map<String, Double> totalSalDepwise = emp.avgSalByDept(employeeList);
+		System.out.println("Department wise total Salary");
+		System.out.println("...........................");
+		for (Entry<String, Double> entry : totalSalDepwise.entrySet()) {
+
 			System.out.println(entry.getKey() + " :" + entry.getValue());
-			
-			
+
 		}
-		Map<String, Double> avgSalbyDept
+		System.out.println();
+		Map<String, Double> salAvgMap = emp.deptWiseAvgSal(employeeList);
+		System.out.println("Average Salary Department Wise");
+		System.out.println("................................");
+		for (Entry<String, Double> entry : salAvgMap.entrySet()) {
+
+			System.out.println(entry.getKey() + ": " + entry.getValue());
+		}
+		System.out.println();
+		List<String> matchedNames = emp.getMatchedNames(employeeList);
+		System.out.println("Pattren Matched Names @@@@@ :" + matchedNames);
+		System.out.println(".............................");
+		System.out.println();
+		List<String> exactMatchedNames = emp.getExactMatchedNames(employeeList);
+		System.out.println(" Exact Names ######:" + exactMatchedNames);
+		System.out.println(".......................");
+		System.out.println();
+		List<String> cmatchedNames = emp.getconMatchedNames(employeeList);
+		System.out.println("List Contained Names ######:" + cmatchedNames);
+
 	}
 
 }
