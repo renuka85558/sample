@@ -142,42 +142,38 @@ class Emp {
 		return deptWiseEmps;
 	}
 
-	public Map<String, Double> avgSalByDept(List<Employee> empList) {
+	public Map<String, Double> totalSalDeptwise(List<Employee> empList) {
 
-		Map<String, Double> deptWiseAvgSal = new HashMap<String, Double>();
+		Map<String, Double> deptWiseTotalSal = new HashMap<String, Double>();
 
 		for (Employee e : empList) {
 			double total = e.getSalary();
-			if (deptWiseAvgSal.containsKey(e.getDepartment())) {
+			if (deptWiseTotalSal.containsKey(e.getDepartment())) {
 
-				double sal = deptWiseAvgSal.get(e.getDepartment());
+				double sal = deptWiseTotalSal.get(e.getDepartment());
 				total = total + sal;
 
-				deptWiseAvgSal.put(e.getDepartment(), total);
+				deptWiseTotalSal.put(e.getDepartment(), total);
 			} else {
-				deptWiseAvgSal.put(e.getDepartment(), e.getSalary());
+				deptWiseTotalSal.put(e.getDepartment(), e.getSalary());
 			}
 		}
-		return deptWiseAvgSal;
+		return deptWiseTotalSal;
 
 	}
 
 	public Map<String, Double> deptWiseAvgSal(List<Employee> list) {
 		Map<String, Double> deptWiseAvgSalmap = new HashMap<String, Double>();
 
-		for (Employee e : list) {
+		Map<String, List<Employee>> newmap = getEmployeesByDept(list);
 
-			Map<String, List<Employee>> newmap = e.getEmployeesByDept(list);
+		for (Entry<String, List<Employee>> entry : newmap.entrySet()) {
+			// System.out.println(entry.getKey()+":"+entry.getValue());
+			String dept = entry.getKey();
+			List<Employee> deptwiseEmpList = entry.getValue();
+			double deptwiseAvgSal = avgSalaryOfEmployees(deptwiseEmpList);
 
-			for (Entry<String, List<Employee>> entry : newmap.entrySet()) {
-				// System.out.println(entry.getKey()+":"+entry.getValue());
-				String dept = entry.getKey();
-				List<Employee> deptwiseEmpList = entry.getValue();
-				double deptwiseAvgSal = avgSalaryOfEmployees(deptwiseEmpList);
-
-				deptWiseAvgSalmap.put(dept, deptwiseAvgSal);
-
-			}
+			deptWiseAvgSalmap.put(dept, deptwiseAvgSal);
 
 		}
 
@@ -192,13 +188,13 @@ class Emp {
 	// total
 	// sal =e.sal
 
-	public List<String> getMatchedNames(List<Employee> empList) {
+	public List<String> getMatchedNames(List<Employee> empList, String name) {
 		List<String> getMatchedEmpNames = new ArrayList<String>();
 
 		for (Employee e : empList) {
 
 			String str = e.getName();
-			if (str.matches("(.*)na(.*)")) {
+			if (str.matches(name)) {
 				getMatchedEmpNames.add(e.getName());
 			}
 
@@ -207,13 +203,13 @@ class Emp {
 		return getMatchedEmpNames;
 	}
 
-	public List<String> getExactMatchedNames(List<Employee> empList) {
+	public List<String> getExactMatchedNames(List<Employee> empList, String name) {
 		List<String> getExactMatchedEmpNames = new ArrayList<String>();
 
 		for (Employee e : empList) {
 
 			String str = e.getName();
-			if (str.equals("nav")) {
+			if (str.equals(name)) {
 				getExactMatchedEmpNames.add(e.getName());
 			}
 
@@ -222,19 +218,53 @@ class Emp {
 		return getExactMatchedEmpNames;
 	}
 
-	public List<String> getconMatchedNames(List<Employee> empList) {
+	public List<String> getconMatchedNames(List<Employee> empList, String name) {
 		List<String> getCMatchedEmpNames = new ArrayList<String>();
 
 		for (Employee e : empList) {
 
 			String str = e.getName();
-			if (str.contains("renu")) {
+			if (str.contains(name)) {
 				getCMatchedEmpNames.add(e.getName());
 			}
 
 		}
 
 		return getCMatchedEmpNames;
+	}
+
+	public List<Employee> getempsAgeIsgraterthan(List<Employee> emplist, int age) {
+		List<Employee> givenAgeGraterThanEmpslist = new ArrayList<Employee>();
+		for (Employee e : emplist) {
+			if (e.getAge() > age) {
+				givenAgeGraterThanEmpslist.add(e);
+			}
+		}
+		return givenAgeGraterThanEmpslist;
+
+	}
+
+	public List<Employee> getempsAgeIsLessthan(List<Employee> emplist, int age) {
+		List<Employee> givenAgelessThanEmpslist = new ArrayList<Employee>();
+		for (Employee e : emplist) {
+			if (e.getAge() < age) {
+				givenAgelessThanEmpslist.add(e);
+			}
+		}
+		return givenAgelessThanEmpslist;
+
+	}
+
+	public List<Employee> betweenageEmpsList(List<Employee> emplist, int startAge, int endAge) {
+		List<Employee> betweenAgeList = new ArrayList<Employee>();
+		for (Employee e : emplist) {
+
+			if (e.getAge() > startAge && e.getAge() < endAge) {
+				betweenAgeList.add(e);
+			}
+
+		}
+		return betweenAgeList;
 	}
 
 	// max salary of employee
@@ -273,6 +303,7 @@ class Emp {
 //200,345
 //500,345
 //345,500
+	//500,345
 // min salary of employee
 	public double getMinSal(List<Employee> empList) {
 		double minimumSal = empList.get(0).getSalary();
@@ -291,18 +322,18 @@ class Emp {
 	}
 //minsal,sal 
 //	25000,25000
-//25,19
-//19,18 
-//18, 32
-//18,22	
-//18,105
-//105,27
+//250,190
+//190,180 
+//180, 320
+//180,220	
+//180,105
+//105,270
 //105,345
 //105,115
-//105,11
+//105,110
 //105,157
-//105,28
-//105,22
+//105,280
+//105,220
 //105,100
 //100,150
 //100,200
@@ -417,7 +448,7 @@ public class EmployeeOperationsWithoutStreams {
 		System.out.println("average salary of employees   :: " + avgSalary);
 		System.out.println("...........................");
 
-		Map<String, Double> totalSalDepwise = emp.avgSalByDept(employeeList);
+		Map<String, Double> totalSalDepwise = emp.totalSalDeptwise(employeeList);
 		System.out.println("Department wise total Salary");
 		System.out.println("...........................");
 		for (Entry<String, Double> entry : totalSalDepwise.entrySet()) {
@@ -434,17 +465,32 @@ public class EmployeeOperationsWithoutStreams {
 			System.out.println(entry.getKey() + ": " + entry.getValue());
 		}
 		System.out.println();
-		List<String> matchedNames = emp.getMatchedNames(employeeList);
+		String name = "(.*)na(.*)";
+		List<String> matchedNames = emp.getMatchedNames(employeeList, name);
 		System.out.println("Pattren Matched Names @@@@@ :" + matchedNames);
 		System.out.println(".............................");
 		System.out.println();
-		List<String> exactMatchedNames = emp.getExactMatchedNames(employeeList);
+		String exactName = "renu";
+		List<String> exactMatchedNames = emp.getExactMatchedNames(employeeList, exactName);
 		System.out.println(" Exact Names ######:" + exactMatchedNames);
 		System.out.println(".......................");
 		System.out.println();
-		List<String> cmatchedNames = emp.getconMatchedNames(employeeList);
+		String matchedName = "nav";
+		List<String> cmatchedNames = emp.getconMatchedNames(employeeList, matchedName);
 		System.out.println("List Contained Names ######:" + cmatchedNames);
+		System.out.println();
+		int age = 35;
+		List<Employee> graterAgeEmpList = emp.getempsAgeIsgraterthan(employeeList, age);
+		System.out.println(graterAgeEmpList);
+		System.out.println();
+		int lessAge = 40;
+		List<Employee> lessAgeEmpList = emp.getempsAgeIsLessthan(employeeList, lessAge);
+		System.out.println(lessAgeEmpList);
 
+		System.out.println();
+		int startAge = 35, endAge = 40;
+		List<Employee> betweenAgeEmpList = emp.betweenageEmpsList(employeeList, startAge, endAge);
+		System.out.println(betweenAgeEmpList);
 	}
 
 }
