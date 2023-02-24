@@ -141,9 +141,39 @@ class Employee{
 	   
    }
   
-   
-    
+   public List<Employee> anyMatchExample(List<Employee>emplist,String name) {
+	   List<Employee> l= emplist.stream().filter(emp ->emp.getName().contains(name)).collect(Collectors.toList());
+	   
+	   return l;
+	   
+    }  
+   public List<Employee> anyExactMatch(List<Employee>emplist,String name) {
+	   List<Employee> list =emplist.parallelStream().filter(emp ->emp.getName().equals(name)).collect(Collectors.toList());
+	   return list;
+	   
+   }
+   public List<Employee> anyMatch(List<Employee>emplist,String name) {
+	   List<Employee> list =emplist.parallelStream().filter(emp ->emp.getName().matches(name)).collect(Collectors.toList());
+	   return list;
+	   
+   } 
+   public List<Employee> lessAgeEmpsList(List<Employee>emplist,int age) { 
+	   List<Employee> list =emplist.stream().filter(emp ->emp.getAge() < age).collect(Collectors.toList());
+	   return list;
+	   
+   }
+   public List<Employee> graterAgeEmpsList(List<Employee>emplist,int age) { 
+	   List<Employee> list =emplist.stream().filter(emp ->emp.getAge() > age).collect(Collectors.toList());
+	   return list;
+	   
+   }
+   public List<Employee> betweenAgeEmpsList(List<Employee>emplist,int startage,int endage ) { 
+	   List<Employee> list =emplist.stream().filter(emp ->emp.getAge() >startage && emp.getAge()< endage).collect(Collectors.toList());
+	   return list;
+	   
+   }
 }
+
 
 public class EmployeeOperationsWithStreams {
 
@@ -203,11 +233,38 @@ Employee emp = new Employee();
 					
 					
 				}
-			Optional<Employee>e =	employeeList.stream().filter(employee -> employee.getAge() <30).findFirst();
+				int age =40;
+			Optional<Employee>e =	employeeList.stream().filter(employee -> employee.getAge() <age).findFirst();
 			System.out.println(e.get());
 			
 			emp.getAllNamesDeptWise(employeeList);
-			//System.out.println(m);
+			System.out.println();
+			String name ="renu";
+			List<Employee> getMatchedList =emp.anyMatchExample(employeeList, name);
+			System.out.println("Matched list "+getMatchedList);
+			
+			String exactname ="nav";
+			List<Employee> getExactMatchedList =emp.anyExactMatch(employeeList, exactname);
+			System.out.println("Exact Matched list "+getExactMatchedList);
+			
+			String pattenname ="(.*)j(.*)";
+			List<Employee> getpattenList =emp.anyMatch(employeeList, pattenname);
+			System.out.println("pattren Matched list "+getpattenList);
+			boolean b =	employeeList.stream().anyMatch(emps ->emps.getName().contains(name));
+			System.out.println(b);
+		System.out.println();
+		int lessage=25;
+		List<Employee>lessAgelist =emp.lessAgeEmpsList(employeeList, lessage);
+		System.out.println("Given age less employee list  "+lessAgelist);
+		int graterage=40;
+		List<Employee>graterAgelist =emp.graterAgeEmpsList(employeeList, graterage);
+		System.out.println("Given age grater employee list  "+graterAgelist);
+		System.out.println();
+		int startage=20, endAge =30;
+		List<Employee>betweenAgelist =emp.betweenAgeEmpsList(employeeList, startage,endAge);
+		System.out.println("Given age between employee list  "+betweenAgelist);
 	}
+
+	
 
 }

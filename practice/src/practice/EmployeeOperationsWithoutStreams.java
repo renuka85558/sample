@@ -284,7 +284,7 @@ class Emp {
 	}
 
 //sal ,maxsal
-//25,0
+//250,0
 //190,250
 //190,250
 //180,250
@@ -303,7 +303,7 @@ class Emp {
 //200,345
 //500,345
 //345,500
-	//500,345
+//500,345
 // min salary of employee
 	public double getMinSal(List<Employee> empList) {
 		double minimumSal = empList.get(0).getSalary();
