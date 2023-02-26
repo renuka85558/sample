@@ -13,7 +13,7 @@ public class ReverseChar {
             low++;
             high--;
             }
-        System.out.println(s);
+        System.out.println(" "+s);
 	}
 
 }
